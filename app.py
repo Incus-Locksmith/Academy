@@ -35,10 +35,20 @@ app.config["MAX_CONTENT_LENGTH"] = (
     int(os.environ.get("MAX_UPLOAD_MB", "100")) * 1024 * 1024
 )
 
-UPLOAD_FOLDER = Path(
+# Prefer a Render persistent disk when one is attached.
+# If /var/data is not writable yet, fall back to temporary storage so the
+# application can still deploy. Files in temporary storage will not survive
+# a restart or redeploy.
+preferred_upload_folder = Path(
     os.environ.get("UPLOAD_FOLDER", "/var/data/academy_uploads")
 )
-UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+
+try:
+    preferred_upload_folder.mkdir(parents=True, exist_ok=True)
+    UPLOAD_FOLDER = preferred_upload_folder
+except OSError:
+    UPLOAD_FOLDER = Path("/tmp/academy_uploads")
+    UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
 db = SQLAlchemy(app)
 
