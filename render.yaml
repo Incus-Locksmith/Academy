@@ -22,6 +22,6 @@ services:
 
 databases:
   - name: locksmith-academy-db
-    plan: free
+    plan: basic-256mb
     databaseName: locksmith_academy
     user: locksmith_academy_user
