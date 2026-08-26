@@ -356,7 +356,7 @@ BASE_HTML = """
         }
 
         .category-pill {
-            background: var(--blue);
+            background: #39C62F;
         }
 
         label {
@@ -391,18 +391,58 @@ BASE_HTML = """
             display: inline-block;
             border: 0;
             border-radius: 9px;
-            background: var(--blue);
+            background: #39C62F;
             color: white;
             padding: 12px 18px;
             font-weight: 700;
             text-decoration: none;
             cursor: pointer;
             margin-top: 14px;
+            box-shadow: 0 3px 0 #218A1B;
+            transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
         }
 
-        .btn.secondary { background: var(--navy); }
-        .btn.light { background: #dce8ee; color: var(--navy); }
-        .btn.danger { background: var(--red); }
+        .btn:hover {
+            background: #31B528;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 0 #1D7818;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 0 #1D7818;
+        }
+
+        .btn.secondary {
+            background: #44565F;
+            box-shadow: 0 3px 0 #2D3940;
+        }
+
+        .btn.secondary:hover {
+            background: #394951;
+            box-shadow: 0 4px 0 #263138;
+        }
+
+        .btn.light {
+            background: #DDF6D9;
+            color: #1D5F19;
+            box-shadow: 0 3px 0 #A7D8A0;
+        }
+
+        .btn.light:hover {
+            background: #CDEFC7;
+            box-shadow: 0 4px 0 #96CA8E;
+        }
+
+        .btn.danger {
+            background: #E33A2F;
+            box-shadow: 0 3px 0 #A9231B;
+        }
+
+        .btn.danger:hover {
+            background: #C93228;
+            box-shadow: 0 4px 0 #8F1F18;
+        }
 
         .btn.small {
             padding: 8px 12px;
@@ -486,7 +526,7 @@ BASE_HTML = """
         }
 
         th {
-            background: var(--navy);
+            background: #44565F;
             color: white;
         }
 
@@ -519,8 +559,9 @@ BASE_HTML = """
         }
 
         .admin-tabs a.active {
-            background: var(--navy);
+            background: #39C62F;
             color: white;
+            border-color: #39C62F;
         }
 
         .resource-media {
@@ -1297,11 +1338,23 @@ def resource_detail(resource_id):
                     Your browser does not support audio playback.
                 </audio>
 
+                <div class="actions">
+                    <a class="btn light" href="{{ file_url }}" download>
+                        Download audio
+                    </a>
+                </div>
+
             {% elif extension == 'mp4' %}
                 <video controls class="resource-media">
                     <source src="{{ file_url }}">
                     Your browser does not support video playback.
                 </video>
+
+                <div class="actions">
+                    <a class="btn light" href="{{ file_url }}" download>
+                        Download video
+                    </a>
+                </div>
 
             {% elif extension in ['jpg', 'jpeg', 'png', 'webp', 'gif'] %}
                 <img
@@ -1310,15 +1363,27 @@ def resource_detail(resource_id):
                     alt="{{ resource.title }}"
                 >
 
+                <div class="actions">
+                    <a class="btn" href="{{ file_url }}" download>
+                        Download map / image
+                    </a>
+                </div>
+
             {% else %}
-                <a
-                    class="btn"
-                    href="{{ file_url }}"
-                    target="_blank"
-                    rel="noopener"
-                >
-                    Open or download file
-                </a>
+                <div class="actions">
+                    <a
+                        class="btn"
+                        href="{{ file_url }}"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        Open file
+                    </a>
+
+                    <a class="btn light" href="{{ file_url }}" download>
+                        Download file
+                    </a>
+                </div>
             {% endif %}
         {% else %}
             <div class="alert">
